@@ -3,7 +3,7 @@
 Plugin Name: Mixcloud Embed
 Plugin URI: http://www.bjtliveset.com/
 Description: MixCloud Shortcode for posts and pages. Defaut usage: [mixcloud]http://www.mixcloud.com/artist-name/long-live-set-name/[/mixcloud]. Make sure it's the track permalink (...com/artist-name/dj-set-or-live-name/) instead of "...com/player/". Optional parameters: height and width. [mixcloud height="100" width="400"]http://www.mixcloud.com/artist-name/recorded-live-somewhere/[/mixcloud]. The slash at the end is necessary.
-Version: 1.0
+Version: 1.0.2
 Author: Domenico Biancardi <bjtliveset@gmail.com>
 Author URI: http://www.bjtliveset.com
 
