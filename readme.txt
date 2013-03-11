@@ -19,7 +19,7 @@ As default you only need to copy the URL of the song from Mixcloud you wish to a
  
 `[mixcloud]http://www.mixcloud.com/artist-name/long-live-set-name/[/mixcloud]`
 
-Make sure it's the permalink (*…com/artist-name/dj-set-or-live-name/*) instead of "*…com/pilayer/*". 
+Make sure it's the permalink (*…com/artist-name/dj-set-or-live-name/*) instead of "*…com/bjtliveset/*". 
 
 The optional parameters are height and width: 
 
@@ -35,13 +35,13 @@ This version accepts the following parameters:
 
 = Examples =
 
-`[mixcloud]http://www.mixcloud.com/essential/essential-podcast-conception-041/[/mixcloud]`
+`[mixcloud]http://www.mixcloud.com/BJT/bjt-liveset-minimal-part1/[/mixcloud]`
 
-`[mixcloud height="100" width="400"]http://www.mixcloud.com/slam/slam-monopod-0092-recorded-live-sub-club/[/mixcloud]`
+`[mixcloud height="100" width="400"]http://www.mixcloud.com/BJT/bjt-djset-1/[/mixcloud]`
 
-`[mixcloud iframe="true"]http://www.mixcloud.com/essential/essential-podcast-conception-041/[/mixcloud]`
+`[mixcloud iframe="true"]http://www.mixcloud.com/BJT/bjt-liveset-techno-part1/[/mixcloud]`
 
-`[mixcloud iframe="false"]http://www.mixcloud.com/essential/essential-podcast-conception-041/[/mixcloud]`
+`[mixcloud iframe="false"]http://www.mixcloud.com/BJT/live-set-10-short/[/mixcloud]`
 
 == Installation ==
 
@@ -62,7 +62,7 @@ As default you only need to copy the URL of the song from Mixcloud you wish to a
  
 `[mixcloud]http://www.mixcloud.com/artist-name/long-live-set-name/[/mixcloud]`
 
-Make sure it's the permalink (*…com/artist-name/dj-set-or-live-name/*) instead of "*…com/pilayer/*". 
+Make sure it's the permalink (*…com/artist-name/dj-set-or-live-name/*) instead of "*…com/bjtliveset/*". 
 
 The optional parameters are height and width: 
 
@@ -78,13 +78,13 @@ The first version accepts the following parameters:
 
 = Examples =
 
-`[mixcloud]http://www.mixcloud.com/essential/essential-podcast-conception-041/[/mixcloud]`
+`[mixcloud]http://www.mixcloud.com/BJT/bjt-liveset-minimal-part1/[/mixcloud]`
 
-`[mixcloud height="100" width="400"]http://www.mixcloud.com/slam/slam-monopod-0092-recorded-live-sub-club/[/mixcloud]`
+`[mixcloud height="100" width="400"]http://www.mixcloud.com/BJT/bjt-djset-1/[/mixcloud]`
 
-`[mixcloud iframe="true"]http://www.mixcloud.com/essential/essential-podcast-conception-041/[/mixcloud]`
+`[mixcloud iframe="true"]http://www.mixcloud.com/BJT/bjt-liveset-techno-part1/[/mixcloud]`
 
-`[mixcloud iframe="false"]http://www.mixcloud.com/essential/essential-podcast-conception-041/[/mixcloud]`
+`[mixcloud iframe="false"]http://www.mixcloud.com/BJT/live-set-10-short/[/mixcloud]`
 
 == Screenshots ==
 
