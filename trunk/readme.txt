@@ -1,6 +1,6 @@
 === Mixcloud Embed ===
 Contributors: domenicobiancardi
-Tags: mixcloud, html5, flash, player, shortcode,
+Tags: mixcloud, html5, flash, player, shortcode, streaming
 Requires at least: 3.5.1
 Tested up to: 3.5.1
 Stable tag: develop
