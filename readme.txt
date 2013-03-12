@@ -29,9 +29,10 @@ The optional parameters are height and width:
 
 This version accepts the following parameters:
 
-*	Height: integer value 
-*	Width: integer value
-*   Iframe: boolean value
+*	Height:     integer value
+*	Width:      integer value
+*   Iframe:     boolean value
+*   Playlist:   boolean value
 
 = Examples =
 
@@ -42,6 +43,8 @@ This version accepts the following parameters:
 `[mixcloud iframe="true"]http://www.mixcloud.com/BJT/bjt-liveset-techno-part1/[/mixcloud]`
 
 `[mixcloud iframe="false"]http://www.mixcloud.com/BJT/live-set-10-short/[/mixcloud]`
+
+`[mixcloud playlist="true"]http://www.mixcloud.com/BJT/live-set-10-short/[/mixcloud]`
 
 == Installation ==
 
@@ -68,13 +71,18 @@ The optional parameters are height and width:
 
 `[mixcloud height="100" width="400"]http://www.mixcloud.com/artist-name/recorded-live-somewhere/[/mixcloud]`
 
+The optional parameters are playlist. This parameter allow you to publish on your blog the playlist of the mixcloud selected.
+
+`[mixcloud playlist="true"]http://www.mixcloud.com/BJT/live-set-10-short/[/mixcloud]`
+
 = Parameters =
 
 The first version accepts the following parameters:
 
-*	Height: integer value 
-*	Width: integer value    
-*   Iframe: boolean value
+*	Height:     integer value
+*	Width:      integer value
+*   Iframe:     boolean value
+*   Playlist:   boolean value
 
 = Examples =
 
@@ -86,11 +94,16 @@ The first version accepts the following parameters:
 
 `[mixcloud iframe="false"]http://www.mixcloud.com/BJT/live-set-10-short/[/mixcloud]`
 
+`[mixcloud playlist="true"]http://www.mixcloud.com/BJT/live-set-10-short/[/mixcloud]`
+
 == Screenshots ==
 
 1. Mixcloud player on a post
 
-== Changelog ==	
+== Changelog ==
+
+= 1.2 =
+* Added the function to retrieve a playlist
 
 = 1.1 =
 * Setting a default value from admin menu

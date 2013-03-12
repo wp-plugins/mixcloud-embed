@@ -3,7 +3,7 @@
 Plugin Name: Mixcloud Embed
 Plugin URI: http://www.bjtliveset.com/
 Description: MixCloud Shortcode for posts and pages. Defaut usage: [mixcloud]http://www.mixcloud.com/artist-name/long-live-set-name/[/mixcloud]. Make sure it's the track permalink (...com/artist-name/dj-set-or-live-name/) instead of "...com/player/". Optional parameters: height and width. [mixcloud height="100" width="400"]http://www.mixcloud.com/artist-name/recorded-live-somewhere/[/mixcloud]. The slash at the end is necessary.
-Version: 1.1
+Version: 1.2
 Author: Domenico Biancardi <bjtliveset@gmail.com>
 Author URI: http://www.bjtliveset.com
 
@@ -18,9 +18,16 @@ if (!class_exists("mixcloudEmbed")) {
     // If it doesn't exist, create mixcloudShortcode class
     class mixcloudEmbed
     {
+        private $table_name;
+        private $wpdb;
+
         function mixcloudEmbed()
         {
             //constructor
+            global $wpdb;
+            $this->wpdb = $wpdb;
+            $this->errors = new WP_Error();
+            $this->table_name = $this->wpdb->prefix . "mixcloudPlaylist";
         }
 
         /**
@@ -33,14 +40,15 @@ if (!class_exists("mixcloudEmbed")) {
          */
         function createShortcode($atts, $content = null)
         {
-            $myErrors = new WP_Error();
+
 
             // read if there are a default value or a customizated value
             $atts = array(
-                'height' => ($this->getOption("player_height") == "") ? $atts["height"] : $this->getOption("player_height"),
-                'width' => ($this->getOption("player_width") == "") ? $atts["width"] : $this->getOption("player_width"),
-                'color' => ($this->getOption("player_color") == "") ? $atts["color"] : $this->getOption("player_color"),
-                'iframe' => ($this->getOption("player_iframe") == "") ? $atts["iframe"] : $this->getOption("player_iframe"),
+                'height' => ($atts["height"] != "") ? $atts["height"] : $this->getOption("player_height"),
+                'width' => ($atts["width"] != "") ? $atts["width"] : $this->getOption("player_width"),
+                'color' => ($atts["color"]  != "") ? $atts["color"] : $this->getOption("player_color"),
+                'iframe' => ($atts["iframe"] != "") ? $atts["iframe"] : $this->getOption("player_iframe"),
+                'playlist' => ($atts["playlist"]!= "") ? $atts["playlist"] : $this->getOption("player_playlist"),
             );
 
             // clear a width or height value
@@ -49,7 +57,7 @@ if (!class_exists("mixcloudEmbed")) {
 
             // the content are required
             if ($content == "") {
-                $myErrors->add('no_url', __('The url to mixcloud stream are required!'));
+                $this->errors->add('no_url', __('The url to mixcloud stream are required!'));
             }
 
             if ($atts["iframe"]) {
@@ -58,15 +66,60 @@ if (!class_exists("mixcloudEmbed")) {
                 $code = "<object width='" . $atts["width"] . "' height='" . $atts["height"] . "'><param name='movie' value='//www.mixcloud.com/media/swf/player/mixcloudLoader.swf?feed=$content&embed_uuid=c4579e14-9570-4cce-9f7a-97c1f9e17929&stylecolor=" . $atts["color"] . "&embed_type=widget_standard'></param><param name='allowFullScreen' value='true'></param><param name='wmode' value='opaque'></param><param name='allowscriptaccess' value='always'></param><embed src='//www.mixcloud.com/media/swf/player/mixcloudLoader.swf?feed=$content&embed_uuid=c4579e14-9570-4cce-9f7a-97c1f9e17929&stylecolor=" . $atts["color"] . "&embed_type=widget_standard' type='application/x-shockwave-flash' wmode='opaque' allowscriptaccess='always' allowfullscreen='true' width='" . $atts["width"] . "' height='" . $atts["height"] . "'></embed></object>";
             }
 
-            if (sizeof($myErrors -> get_error_messages()) > 0){
+            if($atts["playlist"] ===  true){
+                // get a playlist information
+                $playlistCode = $this->getPlaylist($content);
+            }
+
+            if (sizeof($this->errors->get_error_messages()) > 0) {
                 $code = "<b>##############<br/>Cannot generate a Mixcloud Embed because: <ul>";
-                for($i=0;$i<sizeof($myErrors -> get_error_messages());$i++){
-                  $code .= "<li>".$myErrors  -> get_error_message("no_url") ."</li>";
+                for ($i = 0; $i < sizeof($this->errors->get_error_messages()); $i++) {
+                    $code .= "<li>" . $this->errors->get_error_message("no_url") . "</li>";
                 }
                 $code .= "</ul>##############</b>";
             }
+            return $code . $playlistCode;
+        }
 
+        function getPlaylist($url)
+        {
+            // extract a array with a playlist of tracks
+            $playlist = array();
+            // if the playlist are saved to db, i load it from db
+            $playlist = $this->wpdb->get_row("SELECT ID, url, playlist FROM " . $this->table_name . " WHERE url = '" . $url . "'");
+            if ($this->wpdb->num_rows > 0) {
+                $playlist = unserialize($playlist->playlist);
+            } else {
+                $code = implode("", file($url));
+                if ($code == "")$this->errors->add('no_content', __('The url $url are not valid!'));
+                preg_match_all("/section-row-track(.+)/", $code, $results);
+                for ($i = 0; $i < sizeof($results[0]); $i++) {
+                    preg_match("/class=\"tracklisttrackname mx-link\">(.+)<\/a>/U", $results[0][$i], $match);
+                    $title = $match[1];
+                    preg_match("/class=\"tracklistartistname mx-link\">(.+)<\/a>/U", $results[0][$i], $match);
+                    $artist = $match[1];
+                    if ($title != "" || $artist != "") {
+                        $playlist[] = array("title" => $title, "artist" => $artist);
+                    }
+                }
+
+                $this->wpdb->show_errors();
+                // save to db the playlist for this url
+                $this->wpdb->insert($this->table_name, array("url" => $url, "playlist" => serialize($playlist)), array("%s", "%s"));
+            }
+            $code = "<h3>Playlist</h3><ul class='mixcloud-embed-playlist'>";
+            for($i=0;$i<count($playlist);$i++){
+                $code .= "<li><span class='mixcloud-embed-position'>".($i+1) . "</span>";
+                $code .= "<span class='mixcloud-embed-artist'>".$playlist[$i]["artist"] . "</span>";
+                $code .= "<span class='mixcloud-embed-title'>".$playlist[$i]["title"] . "</span></li>";
+
+            }
+            $code .= "</ul>";
             return $code;
+        }
+
+        function addCss(){
+            wp_enqueue_style('mixcloud-embed', plugins_url('mixcloud-embed.css', __FILE__) );
         }
 
         /**
@@ -76,7 +129,28 @@ if (!class_exists("mixcloudEmbed")) {
         {
             add_options_page('Mixcloud Embed Options', 'Mixcloud', 'manage_options', 'mixcloud-embed', array(&$this, 'adminOptionsMenu'));
             add_action('admin_init', array(&$this, 'registerMixcloudSettings'));
+
         }
+
+        function jal_install()
+        {
+            global $jal_db_version;
+
+
+            $sql = "CREATE TABLE " . $this->table_name . " (
+              id mediumint(9) NOT NULL AUTO_INCREMENT,
+              url VARCHAR(55) DEFAULT '' NOT NULL,
+              playlist text NOT NULL,
+              UNIQUE KEY id (id)
+                );";
+
+
+            require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+            dbDelta($sql);
+
+            add_option("jal_db_version", $jal_db_version);
+        }
+
 
         function registerMixcloudSettings()
         {
@@ -84,6 +158,7 @@ if (!class_exists("mixcloudEmbed")) {
             register_setting('mixcloud-embed-settings', 'mixcloud-embed_player_width ');
             register_setting('mixcloud-embed-settings', 'mixcloud-embed_player_iframe');
             register_setting('mixcloud-embed-settings', 'mixcloud-embed_player_color');
+            register_setting('mixcloud-embed-settings', 'mixcloud-embed_player_playlist');
         }
 
         /**
@@ -148,18 +223,6 @@ if (!class_exists("mixcloudEmbed")) {
                         </td>
                     </tr>
 
-                    <tr valign="top">
-                        <th scope="row">Current Default 'params'</th>
-                        <td>
-                            <?php echo http_build_query(array_filter(array(
-                            'auto_play' => get_option('mixcloud-embed_auto_play'),
-                            'show_comments' => get_option('mixcloud-embed_show_comments'),
-                            'color' => get_option('mixcloud-embed_color'),
-                            'theme_color' => get_option('mixcloud-embed_theme_color'),
-                        ))) ?>
-                        </td>
-                    </tr>
-
 
                     <tr valign="top">
                         <th scope="row">Color</th>
@@ -167,6 +230,16 @@ if (!class_exists("mixcloudEmbed")) {
                             <input type="text" name="mixcloud-embed_color" value="<?php echo get_option('mixcloud-embed_color'); ?>"/>
                             (color hex code e.g. ff6699)<br/>
                             Defines the color to paint the play button, waveform and selections.
+                        </td>
+                    </tr>
+
+                    <tr valign="top">
+                        <th scope="row">Playlist</th>
+                        <td>
+                            <input type="radio" id="player_playlist_true" name="mixcloud-embed_player_playlist" value="true"  <?php if (strtolower(get_option('mixcloud-embed_player_playlist')) === 'true') echo 'checked'; ?> />
+                            <label for="player_playlist_true" style="margin-right: 1em;">Display playlist of the mixcloud</label>
+                            <input type="radio" id="player_playlist_false" name="mixcloud-embed_player_playlist" value="false" <?php if (strtolower(get_option('mixcloud-embed_player_playlist')) === 'false') echo 'checked'; ?> />
+                            <label for="player_playlist_false" style="margin-right: 1em;">Don't display playlist</label>
                         </td>
                     </tr>
 
@@ -189,11 +262,18 @@ $obj_mixcloud = new mixcloudEmbed();
 
 // If an instance of the $obj_mixcloud object was created, add shortcode 
 if (isset($obj_mixcloud)) {
+
+    register_activation_hook(__FILE__, array(&$obj_mixcloud, 'jal_install'));
+
+    add_action( 'wp_print_styles', array(&$obj_mixcloud, 'addCss') );
+
     // Adding 'mixcloud' shortcode. & is necessary because we are calling a function inside the class.
     add_shortcode('mixcloud', array(&$obj_mixcloud, 'createShortcode'));
 
     // Adding a admin menu to do a default setting for the embed code
     add_action('admin_menu', array(&$obj_mixcloud, 'hookOptionsMenu'));
+
+
 }
 
 
