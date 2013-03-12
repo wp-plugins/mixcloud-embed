@@ -102,6 +102,9 @@ The first version accepts the following parameters:
 
 == Changelog ==
 
+= 1.2.1 =
+* Fix bug on the logic of enabled/disabled parameters
+
 = 1.2 =
 * Added the function to retrieve a playlist
 

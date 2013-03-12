@@ -3,7 +3,7 @@
 Plugin Name: Mixcloud Embed
 Plugin URI: http://www.bjtliveset.com/
 Description: MixCloud Shortcode for posts and pages. Defaut usage: [mixcloud]http://www.mixcloud.com/artist-name/long-live-set-name/[/mixcloud]. Make sure it's the track permalink (...com/artist-name/dj-set-or-live-name/) instead of "...com/player/". Optional parameters: height and width. [mixcloud height="100" width="400"]http://www.mixcloud.com/artist-name/recorded-live-somewhere/[/mixcloud]. The slash at the end is necessary.
-Version: 1.2
+Version: 1.2.1
 Author: Domenico Biancardi <bjtliveset@gmail.com>
 Author URI: http://www.bjtliveset.com
 
@@ -60,13 +60,13 @@ if (!class_exists("mixcloudEmbed")) {
                 $this->errors->add('no_url', __('The url to mixcloud stream are required!'));
             }
 
-            if ($atts["iframe"]) {
+            if ($atts["iframe"] !== "false") {
                 $code = "<iframe width='" . $atts["width"] . "' height='" . $atts["height"] . "' src='//www.mixcloud.com/widget/iframe/?feed=$content&embed_uuid=4743a4fe-c254-4cb4-a49e-bf2d6d1e8d94&stylecolor=" . $atts['color'] . "&embed_type=widget_standard' frameborder='0'></iframe>";
             } else {
                 $code = "<object width='" . $atts["width"] . "' height='" . $atts["height"] . "'><param name='movie' value='//www.mixcloud.com/media/swf/player/mixcloudLoader.swf?feed=$content&embed_uuid=c4579e14-9570-4cce-9f7a-97c1f9e17929&stylecolor=" . $atts["color"] . "&embed_type=widget_standard'></param><param name='allowFullScreen' value='true'></param><param name='wmode' value='opaque'></param><param name='allowscriptaccess' value='always'></param><embed src='//www.mixcloud.com/media/swf/player/mixcloudLoader.swf?feed=$content&embed_uuid=c4579e14-9570-4cce-9f7a-97c1f9e17929&stylecolor=" . $atts["color"] . "&embed_type=widget_standard' type='application/x-shockwave-flash' wmode='opaque' allowscriptaccess='always' allowfullscreen='true' width='" . $atts["width"] . "' height='" . $atts["height"] . "'></embed></object>";
             }
 
-            if($atts["playlist"] ===  true){
+            if($atts["playlist"] != "false"){
                 // get a playlist information
                 $playlistCode = $this->getPlaylist($content);
             }
