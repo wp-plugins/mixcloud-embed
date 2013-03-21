@@ -6,8 +6,7 @@ Tested up to: 3.5.1
 Stable tag: stable
 
 The Mixcloud Embed plugin allows you to embed the Mixcloud player to your Wordpress blog or page.
-This plugin was born on the old Mixcloud Shortcode, but this plugin is not develop from the author and the last version
-was not working correctly.
+This plugin can display a playlist of your mix or the cloudcast information.
 
 == Description ==
 
@@ -25,6 +24,12 @@ The optional parameters are height and width:
 
 `[mixcloud height="100" width="400"]http://www.mixcloud.com/artist-name/recorded-live-somewhere/[/mixcloud]`
 
+If you want display a cloudcast profile you must add the parameter profile with value true
+
+`[mixcloud profile="true"]http://www.mixcloud.com/BJT/[/mixcloud]`
+
+This shortcode display a cloudcast profile BJT.
+
 = Parameters =
 
 This version accepts the following parameters:
@@ -33,6 +38,7 @@ This version accepts the following parameters:
 *	Width:      integer value
 *   Iframe:     boolean value
 *   Playlist:   boolean value
+*   Profile:    boolean value
 
 = Examples =
 
@@ -45,6 +51,8 @@ This version accepts the following parameters:
 `[mixcloud iframe="false"]http://www.mixcloud.com/BJT/live-set-10-short/[/mixcloud]`
 
 `[mixcloud playlist="true"]http://www.mixcloud.com/BJT/live-set-10-short/[/mixcloud]`
+
+`[mixcloud profile="true"]http://www.mixcloud.com/BJT/[/mixcloud]`
 
 == Installation ==
 
@@ -75,6 +83,12 @@ The optional parameters are playlist. This parameter allow you to publish on you
 
 `[mixcloud playlist="true"]http://www.mixcloud.com/BJT/live-set-10-short/[/mixcloud]`
 
+If you want display a cloudcast profile you must add the parameter profile with value true
+
+`[mixcloud profile="true"]http://www.mixcloud.com/BJT/[/mixcloud]`
+
+This shortcode display a cloudcast profile BJT.
+
 = Parameters =
 
 The first version accepts the following parameters:
@@ -83,6 +97,7 @@ The first version accepts the following parameters:
 *	Width:      integer value
 *   Iframe:     boolean value
 *   Playlist:   boolean value
+*   Profile:    boolean value
 
 = Examples =
 
@@ -96,11 +111,16 @@ The first version accepts the following parameters:
 
 `[mixcloud playlist="true"]http://www.mixcloud.com/BJT/live-set-10-short/[/mixcloud]`
 
+`[mixcloud profile="true"]http://www.mixcloud.com/BJT/[/mixcloud]`
+
 == Screenshots ==
 
 1. Mixcloud player on a post
 
 == Changelog ==
+
+= 1.3 =
+* View a cloudcast profile information
 
 = 1.2.1 =
 * Fix bug on the logic of enabled/disabled parameters
