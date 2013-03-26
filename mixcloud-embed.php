@@ -3,18 +3,35 @@
 Plugin Name: Mixcloud Embed
 Plugin URI: http://www.bjtliveset.com/
 Description: MixCloud Shortcode for posts and pages. Defaut usage: [mixcloud]http://www.mixcloud.com/artist-name/long-live-set-name/[/mixcloud]. Make sure it's the track permalink (...com/artist-name/dj-set-or-live-name/) instead of "...com/player/". Optional parameters: height and width. [mixcloud height="100" width="400"]http://www.mixcloud.com/artist-name/recorded-live-somewhere/[/mixcloud]. The slash at the end is necessary.
-Version: 1.3
+Version: 1.4
 Author: Domenico Biancardi <bjtliveset@gmail.com>
 Author URI: http://www.bjtliveset.com
 
 */
 
+function init_plugin_constants()
+{
+
+    if (!defined('PLUGIN_LOCALE')) {
+        define('PLUGIN_LOCALE', 'mixcloud-embed-locale');
+    } // end if
+
+    if (!defined('PLUGIN_NAME')) {
+        define('PLUGIN_NAME', 'Mixcloud Embed');
+    } // end if
+
+    if (!defined('PLUGIN_SLUG')) {
+        define('PLUGIN_SLUG', 'Mixcloud-Embed');
+    } // end if
+
+} // end init_plugin_constants
 
 /*
     Checking if a class named mixcloudShortcode exists to avoid
     naming collisions with other WordPress plugins.
 */
 if (!class_exists("mixcloudEmbed")) {
+
     // If it doesn't exist, create mixcloudShortcode class
     class mixcloudEmbed
     {
@@ -98,7 +115,7 @@ if (!class_exists("mixcloudEmbed")) {
         {
             $explode = explode("/", $content);
             $profile = $explode[0] . "//" . $explode[2] . "/" . $explode[3] . "/";
-            $code = '<a class="mixcloud-follow-widget" href="' . $profile . '" data-h="' . $atts["height"] . '"  data-w="' . $atts["width"] . '" data-faces="on">Follow '.$explode[3].' on Mixcloud</a><script type="text/javascript" src="http://widget.mixcloud.com/media/js/follow_embed.js"></script>';
+            $code = '<a class="mixcloud-follow-widget" href="' . $profile . '" data-h="' . $atts["height"] . '"  data-w="' . $atts["width"] . '" data-faces="on">Follow ' . $explode[3] . ' on Mixcloud</a><script type="text/javascript" src="http://widget.mixcloud.com/media/js/follow_embed.js"></script>';
             return $code;
         }
 
@@ -280,12 +297,123 @@ if (!class_exists("mixcloudEmbed")) {
 
     }
 
+
+    class mixcloudEmbed_Widget extends WP_Widget
+    {
+
+
+        function mixcloudEmbed_Widget()
+        {
+            $widget_opts = array(
+                'classname' => PLUGIN_NAME,
+                'description' => __('View a mixcloud profile with your widget', PLUGIN_LOCALE)
+            );
+
+            $this->WP_Widget(PLUGIN_SLUG, __(PLUGIN_NAME, PLUGIN_LOCALE), $widget_opts);
+            load_plugin_textdomain(PLUGIN_LOCALE, false, dirname(plugin_basename(__FILE__)) . '/lang/');
+        }
+
+        function widget($args, $instance)
+        {
+
+
+            extract($args, EXTR_SKIP);
+
+
+            $mixcloud_title = empty($instance['mixcloud_title']) ? '' : apply_filters('mixcloud_title', $instance['mixcloud_title']);
+            $mixcloud_profile = empty($instance['mixcloud_profile']) ? '' : apply_filters('mixcloud_profile', $instance['mixcloud_profile']);
+            $mixcloud_height = empty($instance['mixcloud_height']) ? '' : apply_filters('mixcloud_height', $instance['mixcloud_height']);
+            $mixcloud_width = empty($instance['mixcloud_width']) ? '' : apply_filters('mixcloud_width', $instance['mixcloud_width']);
+
+            $mixcloudEmbed = new mixcloudEmbed();
+
+            $title = apply_filters('widget_title', empty($mixcloud_title) ? "" : $mixcloud_title, $instance, "h3");
+
+            if ($title)
+                $title = $before_title . $title . $after_title;
+
+            $code = $mixcloudEmbed->makeProfileWidget(array("height" => $mixcloud_height, "width" => $mixcloud_width), $mixcloud_profile);
+            ?>
+            <?= $before_widget ?>
+            <?= $title ?>
+            <?= $code ?>
+            <?= $after_widget ?>
+        <?
+
+        } // end widget
+
+
+        function form($instance)
+        {
+
+
+            $instance = wp_parse_args(
+                (array)$instance,
+                array(
+                    'mixcloud_title' => '',
+                    'mixcloud_profile' => '',
+                    'mixcloud_heigth' => '',
+                    'mixcloud_width' => ''
+                )
+            );
+
+            $mixcloud_title = strip_tags(stripslashes($instance['mixcloud_title']));
+            $mixcloud_profile = strip_tags(stripslashes($instance['mixcloud_profile']));
+            $mixcloud_heigth = strip_tags(stripslashes($instance['mixcloud_heigth']));
+            $mixcloud_width = strip_tags(stripslashes($instance['mixcloud_width']));
+
+            ?>
+
+        <div class="wrapper">
+
+            <div class="option">
+                <label for="mixcloud_title">
+                    Widget Title:
+                </label><br/>
+                <input type="text" class="widefat" id="<?php echo $this->get_field_id('mixcloud_title'); ?>" name="<?php echo $this->get_field_name('mixcloud_title'); ?>" value="<?php echo $instance['mixcloud_title']; ?>" class="">
+            </div>
+
+
+            <div class="option">
+                <label for="mixcloud_profile">
+                    Mixcloud Profile:
+                </label><br/>
+                <input type="text" class="widefat" id="<?php echo $this->get_field_id('mixcloud_profile'); ?>" name="<?php echo $this->get_field_name('mixcloud_profile'); ?>" value="<?php echo $instance['mixcloud_profile']; ?>" class="">
+            </div>
+
+            <div class="option">
+                <label for="mixcloud_height">
+                    Height:
+                </label><br/>
+                <input type="text" id="<?php echo $this->get_field_id('mixcloud_height'); ?>" name="<?php echo $this->get_field_name('mixcloud_height'); ?>" value="<?php echo $instance['mixcloud_height']; ?>" class="">
+            </div>
+
+            <div class="option">
+                <label for="mixcloud_width">
+                    Width:
+                </label><br/>
+                <input type="text" class="widefat" id="<?php echo $this->get_field_id('mixcloud_width'); ?>" name="<?php echo $this->get_field_name('mixcloud_width'); ?>" value="<?php echo $instance['mixcloud_width']; ?>" class="">
+            </div>
+
+        </div>
+
+
+        <?
+
+
+        } // end form
+
+
+    }
+
 } //End class mixcloudShortcode
 $obj_mixcloud = new mixcloudEmbed();
 
 
 // If an instance of the $obj_mixcloud object was created, add shortcode 
 if (isset($obj_mixcloud)) {
+
+    init_plugin_constants();
 
     register_activation_hook(__FILE__, array(&$obj_mixcloud, 'jal_install'));
 
@@ -296,6 +424,8 @@ if (isset($obj_mixcloud)) {
 
     // Adding a admin menu to do a default setting for the embed code
     add_action('admin_menu', array(&$obj_mixcloud, 'hookOptionsMenu'));
+
+    add_action('widgets_init', create_function('', 'register_widget("mixcloudEmbed_Widget");'));
 
 
 }
