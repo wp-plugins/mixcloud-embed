@@ -3,11 +3,13 @@
 Plugin Name: Mixcloud Embed
 Plugin URI: http://www.bjtliveset.com/
 Description: MixCloud Shortcode for posts and pages. Defaut usage: [mixcloud]http://www.mixcloud.com/artist-name/long-live-set-name/[/mixcloud]. Make sure it's the track permalink (...com/artist-name/dj-set-or-live-name/) instead of "...com/player/". Optional parameters: height and width. [mixcloud height="100" width="400"]http://www.mixcloud.com/artist-name/recorded-live-somewhere/[/mixcloud]. The slash at the end is necessary.
-Version: 1.4
+Version: 1.4.1
 Author: Domenico Biancardi <bjtliveset@gmail.com>
 Author URI: http://www.bjtliveset.com
 
 */
+
+include(dirname(__FILE__)."\mixcloudEmbed_Widget.php");
 
 function init_plugin_constants()
 {
@@ -37,6 +39,11 @@ if (!class_exists("mixcloudEmbed")) {
     {
         private $table_name;
         private $wpdb;
+
+        private $uuidPlaylist       = "9e28450c-d230-4d75-8fa8-9f2841cb0165";
+        private $uuidPlaylistFlash  = "24fa4730-87be-4a1a-a3cf-b83cc4b21651";
+        private $uuidEmbed = "4743a4fe-c254-4cb4-a49e-bf2d6d1e8d94";
+        private $uuidEmbedFlash = "c4579e14-9570-4cce-9f7a-97c1f9e17929";
 
         function mixcloudEmbed()
         {
@@ -90,10 +97,22 @@ if (!class_exists("mixcloudEmbed")) {
         function makeEmbedWidget($atts, $content)
         {
             $playlistCode = "";
+            // se ho il content che contiene un url alla playlist allora sto includendo una playlist
+
             if ($atts["iframe"] !== "false") {
-                $code = "<iframe width='" . $atts["width"] . "' height='" . $atts["height"] . "' src='//www.mixcloud.com/widget/iframe/?feed=$content&embed_uuid=4743a4fe-c254-4cb4-a49e-bf2d6d1e8d94&stylecolor=" . $atts['color'] . "&embed_type=widget_standard' frameborder='0'></iframe>";
+                if (strpos($content,"/playlist/") !== false){
+                    $uuid = $this -> uuidPlaylist;
+                }else{
+                    $uuid = $this -> uuidEmbed;
+                }
+                $code = "<iframe width='" . $atts["width"] . "' height='" . $atts["height"] . "' src='//www.mixcloud.com/widget/iframe/?feed=$content&embed_uuid=$uuid&stylecolor=" . $atts['color'] . "&embed_type=widget_standard' frameborder='0'></iframe>";
             } else {
-                $code = "<object width='" . $atts["width"] . "' height='" . $atts["height"] . "'><param name='movie' value='//www.mixcloud.com/media/swf/player/mixcloudLoader.swf?feed=$content&embed_uuid=c4579e14-9570-4cce-9f7a-97c1f9e17929&stylecolor=" . $atts["color"] . "&embed_type=widget_standard'></param><param name='allowFullScreen' value='true'></param><param name='wmode' value='opaque'></param><param name='allowscriptaccess' value='always'></param><embed src='//www.mixcloud.com/media/swf/player/mixcloudLoader.swf?feed=$content&embed_uuid=c4579e14-9570-4cce-9f7a-97c1f9e17929&stylecolor=" . $atts["color"] . "&embed_type=widget_standard' type='application/x-shockwave-flash' wmode='opaque' allowscriptaccess='always' allowfullscreen='true' width='" . $atts["width"] . "' height='" . $atts["height"] . "'></embed></object>";
+                if (strpos($content,"/playlist/") !== false){
+                    $uuid = $this -> uuidPlaylistFlash;
+                }else{
+                    $uuid = $this -> uuidEmbedFlash;
+                }
+                $code = "<object width='" . $atts["width"] . "' height='" . $atts["height"] . "'><param name='movie' value='//www.mixcloud.com/media/swf/player/mixcloudLoader.swf?feed=$content&embed_uuid=$uuid&stylecolor=" . $atts["color"] . "&embed_type=widget_standard'></param><param name='allowFullScreen' value='true'></param><param name='wmode' value='opaque'></param><param name='allowscriptaccess' value='always'></param><embed src='//www.mixcloud.com/media/swf/player/mixcloudLoader.swf?feed=$content&embed_uuid=c4579e14-9570-4cce-9f7a-97c1f9e17929&stylecolor=" . $atts["color"] . "&embed_type=widget_standard' type='application/x-shockwave-flash' wmode='opaque' allowscriptaccess='always' allowfullscreen='true' width='" . $atts["width"] . "' height='" . $atts["height"] . "'></embed></object>";
             }
 
             if ($atts["playlist"] != "false") {
@@ -298,113 +317,7 @@ if (!class_exists("mixcloudEmbed")) {
     }
 
 
-    class mixcloudEmbed_Widget extends WP_Widget
-    {
 
-
-        function mixcloudEmbed_Widget()
-        {
-            $widget_opts = array(
-                'classname' => PLUGIN_NAME,
-                'description' => __('View a mixcloud profile with your widget', PLUGIN_LOCALE)
-            );
-
-            $this->WP_Widget(PLUGIN_SLUG, __(PLUGIN_NAME, PLUGIN_LOCALE), $widget_opts);
-            load_plugin_textdomain(PLUGIN_LOCALE, false, dirname(plugin_basename(__FILE__)) . '/lang/');
-        }
-
-        function widget($args, $instance)
-        {
-
-
-            extract($args, EXTR_SKIP);
-
-
-            $mixcloud_title = empty($instance['mixcloud_title']) ? '' : apply_filters('mixcloud_title', $instance['mixcloud_title']);
-            $mixcloud_profile = empty($instance['mixcloud_profile']) ? '' : apply_filters('mixcloud_profile', $instance['mixcloud_profile']);
-            $mixcloud_height = empty($instance['mixcloud_height']) ? '' : apply_filters('mixcloud_height', $instance['mixcloud_height']);
-            $mixcloud_width = empty($instance['mixcloud_width']) ? '' : apply_filters('mixcloud_width', $instance['mixcloud_width']);
-
-            $mixcloudEmbed = new mixcloudEmbed();
-
-            $title = apply_filters('widget_title', empty($mixcloud_title) ? "" : $mixcloud_title, $instance, "h3");
-
-            if ($title)
-                $title = $before_title . $title . $after_title;
-
-            $code = $mixcloudEmbed->makeProfileWidget(array("height" => $mixcloud_height, "width" => $mixcloud_width), $mixcloud_profile);
-            ?>
-            <?= $before_widget ?>
-            <?= $title ?>
-            <?= $code ?>
-            <?= $after_widget ?>
-        <?
-
-        } // end widget
-
-
-        function form($instance)
-        {
-
-
-            $instance = wp_parse_args(
-                (array)$instance,
-                array(
-                    'mixcloud_title' => '',
-                    'mixcloud_profile' => '',
-                    'mixcloud_heigth' => '',
-                    'mixcloud_width' => ''
-                )
-            );
-
-            $mixcloud_title = strip_tags(stripslashes($instance['mixcloud_title']));
-            $mixcloud_profile = strip_tags(stripslashes($instance['mixcloud_profile']));
-            $mixcloud_heigth = strip_tags(stripslashes($instance['mixcloud_heigth']));
-            $mixcloud_width = strip_tags(stripslashes($instance['mixcloud_width']));
-
-            ?>
-
-        <div class="wrapper">
-
-            <div class="option">
-                <label for="mixcloud_title">
-                    Widget Title:
-                </label><br/>
-                <input type="text" class="widefat" id="<?php echo $this->get_field_id('mixcloud_title'); ?>" name="<?php echo $this->get_field_name('mixcloud_title'); ?>" value="<?php echo $instance['mixcloud_title']; ?>" class="">
-            </div>
-
-
-            <div class="option">
-                <label for="mixcloud_profile">
-                    Mixcloud Profile:
-                </label><br/>
-                <input type="text" class="widefat" id="<?php echo $this->get_field_id('mixcloud_profile'); ?>" name="<?php echo $this->get_field_name('mixcloud_profile'); ?>" value="<?php echo $instance['mixcloud_profile']; ?>" class="">
-            </div>
-
-            <div class="option">
-                <label for="mixcloud_height">
-                    Height:
-                </label><br/>
-                <input type="text" id="<?php echo $this->get_field_id('mixcloud_height'); ?>" name="<?php echo $this->get_field_name('mixcloud_height'); ?>" value="<?php echo $instance['mixcloud_height']; ?>" class="">
-            </div>
-
-            <div class="option">
-                <label for="mixcloud_width">
-                    Width:
-                </label><br/>
-                <input type="text" class="widefat" id="<?php echo $this->get_field_id('mixcloud_width'); ?>" name="<?php echo $this->get_field_name('mixcloud_width'); ?>" value="<?php echo $instance['mixcloud_width']; ?>" class="">
-            </div>
-
-        </div>
-
-
-        <?
-
-
-        } // end form
-
-
-    }
 
 } //End class mixcloudShortcode
 $obj_mixcloud = new mixcloudEmbed();
