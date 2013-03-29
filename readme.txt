@@ -3,7 +3,7 @@ Contributors: BJTliveset
 Tags: mixcloud, html5, flash, player, shortcode, streaming
 Requires at least: 3.5.1
 Tested up to: 3.5.1
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,6 +83,9 @@ The Mixcloud Embed plugin allows you to embed the Mixcloud player to your WordPr
 1. Mixcloud player on a post
 
 == Changelog ==
+
+= 1.4.2 =
+* Fixed an idiot bug
 
 = 1.4.1 =
 * Added the possibility to embed an entire playlist.
