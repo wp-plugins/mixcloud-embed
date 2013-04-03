@@ -3,7 +3,7 @@ Contributors: BJTliveset
 Tags: mixcloud, html5, flash, player, shortcode, streaming
 Requires at least: 3.5.1
 Tested up to: 3.5.1
-Stable tag: 1.4.2
+Stable tag: 1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,8 +12,7 @@ The Mixcloud Embed plugin allows you to embed the Mixcloud player with the playl
 == Description ==
 
 The Mixcloud Embed plugin allows you to add the Mixcloud player into your WordPress blog or page, by using the [mixcloud] shortcode.
-You can also display a playlist of the cloudcast. 
-
+You can also display a playlist of the cloudcast.
 In the last version there is the possibility to use a widget on your sidebar for view your Mixcloud profile.
 
 = Usage =
@@ -83,6 +82,9 @@ The Mixcloud Embed plugin allows you to embed the Mixcloud player to your WordPr
 1. Mixcloud player on a post
 
 == Changelog ==
+
+= 1.5 =
+* No changes for the users, but I have do a refactor for the all plugin
 
 = 1.4.2 =
 * Fixed an idiot bug

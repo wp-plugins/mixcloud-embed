@@ -7,11 +7,11 @@
  */
 
 
-class mixcloudEmbed_Widget extends WP_Widget
+class MixcloudEmbedWidget extends WP_Widget
 {
 
 
-    function mixcloudEmbed_Widget()
+    function MixcloudEmbedWidget()
     {
         $widget_opts = array(
             'classname' => PLUGIN_NAME,
@@ -25,7 +25,7 @@ class mixcloudEmbed_Widget extends WP_Widget
     function widget($args, $instance)
     {
 
-
+        //global $before_title, $after_title, $before_widget, $after_widget;
         extract($args, EXTR_SKIP);
 
 
@@ -41,11 +41,16 @@ class mixcloudEmbed_Widget extends WP_Widget
         if ($title)
             $title = $before_title . $title . $after_title;
 
-        $code = $mixcloudEmbed->makeProfileWidget(array("height" => $mixcloud_height, "width" => $mixcloud_width), $mixcloud_profile);
+        if (!class_exists("MixcloudProfile")) {
+            $path = trailingslashit(dirname(__FILE__));
+            if (!file_exists($path . 'mixcloud-embed-core.php')) return false;
+            require_once($path . 'mixcloud-embed-core.php');
+        }
+        $code = new MixcloudProfile(array("height" => $mixcloud_height, "width" => $mixcloud_width), $mixcloud_profile);
         ?>
         <?= $before_widget ?>
-        <?= $title ?>
-        <?= $code ?>
+            <?= $title ?>
+            <?= $code ?>
         <?= $after_widget ?>
     <?
 
