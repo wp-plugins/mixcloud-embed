@@ -117,7 +117,7 @@ class MixcloudEmbedObject extends AbstractMixcloudObject
     function __construct($options, $url)
     {
         parent::__construct($options, $url);
-        $this->movie = "http://www.mixcloud.com/media/swf/player/mixcloudLoader.swf?feed=".urlencode($url)."&embed_uuid=" . $this->getUuid() . "&stylecolor=" . $this->_options["color"] . "&embed_type=widget_standard";
+        $this->movie = "//www.mixcloud.com/media/swf/player/mixcloudLoader.swf?feed=".urlencode($url)."&embed_uuid=" . $this->getUuid() . "&stylecolor=" . $this->_options["color"] . "&embed_type=widget_standard";
         $this->params["allowFullScreen"] = "true";
         $this->params["wmode"] = "opaque";
         $this->params["allowscriptaccess"] = "always";
@@ -149,7 +149,7 @@ class MixcloudEmbedHtml5 extends AbstractMixcloudObject
     function __construct($options, $url)
     {
         parent::__construct($options, $url);
-        $this->movie = "http://www.mixcloud.com/widget/iframe/?feed=".urlencode($url)."&embed_uuid=" . $this->getUuid() . "&stylecolor=" . $this->_options['color'] . "&embed_type=widget_standard";
+        $this->movie = "//www.mixcloud.com/widget/iframe/?feed=".urlencode($url)."&embed_uuid=" . $this->getUuid() . "&stylecolor=" . $this->_options['color'] . "&embed_type=widget_standard";
     }
 
     public function getUuid()
@@ -368,7 +368,8 @@ class MixcloudEmbedCore
             $object = $this->makeEmbedWidget($options, $content);
         }
 
-        echo $object;
+        //print_R(debug_backtrace());
+        return $object;
     }
 
     /**
@@ -401,7 +402,7 @@ class MixcloudEmbedCore
         }
 
 
-        if ($options["playlist"] != "false" && !$multiEmbed) {
+        if ($options["playlist"] == "true"  && !$multiEmbed) {
             // get a playlist information
             $playlistCode = new MixcloudPlaylist($content);
         }

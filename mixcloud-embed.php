@@ -16,15 +16,14 @@
  ==============================================================================
  Plugin Name: Mixcloud Embed
  Description: The Mixcloud Embed plugin allows you to embed the Mixcloud player with the playlist or put a widget with your Mixcloud account.
- Version: 1.5.1
+ Version: 1.6
  Requires at least: 3.5.1
  Tested up to: 3.5.1
- Stable tag: 1.5.1
+ Stable tag: 1.6
  Contributors: BJTliveset
  Author: BJTLIVESET
  Author URI: http://www.bjtlivest.com
  Text Domain: mixcloud-embed
- Domain Path: /lang/
 
 
 */
@@ -66,6 +65,8 @@ class MixcloudEmbed
         // Adding a admin menu to do a default setting for the embed code
         add_action('admin_menu', array("MixcloudEmbed", 'RegisterAdminPage'));
 
+        // Adding a button into a rich text editor
+        add_action('admin_init', array('MixcloudEmbed', 'SetupEditorButton'));
 
         return true;
 
@@ -125,6 +126,63 @@ class MixcloudEmbed
         }
     }
 
+    /**
+     * Add a button into a rich text editor
+     * @static
+     * @since 1.6
+     */
+    static function SetupEditorButton()
+    {
+
+        if (get_user_option('rich_editing') == 'true' && current_user_can('edit_posts')) {
+            add_action('admin_print_scripts', array('MixcloudEmbed', 'OutputTinyMCEDialogVars'));
+            add_filter('mce_external_plugins', array('MixcloudEmbed', 'AddTinyMCEButtonScript'));
+            add_filter('mce_buttons', array('MixcloudEmbed', 'RegisterTinyMCEButton'));
+        }
+    }
+
+
+    /**
+     * Add the Dialog for TinyMCE
+     * @static
+     * @since 1.6
+     */
+    static function OutputTinyMCEDialogVars()
+    {
+    $data = array(
+        'pluginVersion' => Version::getVersion(),
+        'includesUrl' => includes_url(),
+        'pluginsUrl' => plugins_url()
+    );
+
+    ?>
+    <script type="text/javascript">
+        // <![CDATA[
+        window.mixcloudEmbedDialogData = <?php echo json_encode($data); ?>;
+        // ]]>
+    </script>
+<?php
+}
+    /**
+     * Add a button script for a TinyMCE
+     * @static
+     * @since 1.6
+     */
+    static function AddTinyMCEButtonScript($plugin_array)
+    {
+        $plugin_array['MixcloudEmbedButton'] = plugins_url('mixcloud-embed-button.js', __FILE__);
+        return $plugin_array;
+    }
+    /**
+     * Register a button for a TinyMCE
+     * @static
+     * @since 1.6
+     */
+    static function RegisterTinyMCEButton($buttons)
+    {
+        array_push($buttons, '|', 'MixcloudEmbedButton');
+        return $buttons;
+    }
 
     /**
      * Invokes the HtmlShowOptionsPage method of the generator
@@ -133,7 +191,7 @@ class MixcloudEmbed
     static function CallHtmlShowOptionsPage()
     {
         if (MixcloudEmbed::LoadPlugin()) {
-            $mixcloudObject = &MixcloudEmbedCore::GetInstance();
+            $mixcloudObject = & MixcloudEmbedCore::GetInstance();
             $mixcloudObject->HtmlShowOptionsPage();
         }
     }
@@ -146,8 +204,8 @@ class MixcloudEmbed
     static function CallCreateShortcode($options, $contents)
     {
         if (MixcloudEmbed::LoadPlugin()) {
-            $mixcloudObject = &MixcloudEmbedCore::GetInstance();
-            $mixcloudObject->CreateShortcode($options, $contents);
+            $mixcloudObject = & MixcloudEmbedCore::GetInstance();
+            return $mixcloudObject->CreateShortcode($options, $contents);
         }
     }
 
@@ -260,6 +318,13 @@ class MixcloudEmbed
             $GLOBALS["sm_version"] = $data['Version'];
         }
         return $GLOBALS["sm_version"];
+    }
+}
+
+
+class Version {
+    static function getVersion(){
+        return "1.6";
     }
 }
 
