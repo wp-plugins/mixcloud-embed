@@ -83,6 +83,9 @@ The Mixcloud Embed plugin allows you to embed the Mixcloud player to your WordPr
 
 == Changelog ==
 
+= 1.6.1 =
+* Fix a reported bug "Doesn't escape ampersands and breaks XML (RSS)"
+
 = 1.6 =
 * Fix some bug and add the button to tinymce
 
