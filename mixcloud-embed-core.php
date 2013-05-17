@@ -345,13 +345,15 @@ class MixcloudEmbedCore
 
         // read if there are a default value or a customizated value
         $options = array(
-            'height' => ($options["height"] != "") ? $options["height"] : $this->getOption("player_height"),
-            'width' => ($options["width"] != "") ? $options["width"] : $this->getOption("player_width"),
-            'color' => ($options["color"] != "") ? $options["color"] : $this->getOption("player_color"),
-            'iframe' => ($options["iframe"] != "") ? $options["iframe"] : $this->getOption("player_iframe"),
-            'playlist' => ($options["playlist"] != "") ? $options["playlist"] : $this->getOption("player_playlist"),
-            'profile' => ($options["profile"] != "") ? $options["profile"] : $this->getOption("widget_profile"),
+            'height' 	=> (isset($options["height"]) != "") 	? $options["height"] 	: $this->getOption("player_height"),
+            'width' 	=> (isset($options["width"]) != "") 	? $options["width"] 	: $this->getOption("player_width"),
+            'color' 	=> (isset($options["color"]) != "") 	? $options["color"] 	: $this->getOption("player_color"),
+            'iframe' 	=> (isset($options["iframe"]) != "") 	? $options["iframe"] 	: $this->getOption("player_iframe"),
+            'playlist' 	=> (isset($options["playlist"]) != "") 	? $options["playlist"] 	: $this->getOption("player_playlist"),
+            'profile' 	=> (isset($options["profile"]) != "") 	? $options["profile"] 	: $this->getOption("widget_profile"),
         );
+
+
 
         // clear a width or height value
         $options["width"] = str_replace("px", "", $options["width"]);
