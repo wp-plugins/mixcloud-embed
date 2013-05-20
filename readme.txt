@@ -83,6 +83,9 @@ The Mixcloud Embed plugin allows you to embed the Mixcloud player to your WordPr
 
 == Changelog ==
 
+= 1.6.3 =
+* Fix a bug that closed a <?php tag to the end of the file.
+
 = 1.6.2 =
 * Fix a reported bug "Warning: Illegal string offset after updating server to latest PHP 5.4"
 
