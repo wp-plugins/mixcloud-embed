@@ -90,3 +90,4 @@ class FlashObject
         echo $this->get();
     }
 }
+?>
