@@ -83,6 +83,10 @@ The Mixcloud Embed plugin allows you to embed the Mixcloud player to your WordPr
 
 == Changelog ==
 
+= 1.7 =
+* Update a plugin with a new embed code from Mixcloud.com
+* Add a new options light, cover, artwork, playlist
+
 = 1.6.3 =
 * Fix a bug that closed a <?php tag to the end of the file.
 

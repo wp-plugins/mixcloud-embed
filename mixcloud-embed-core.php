@@ -108,6 +108,29 @@ abstract class AbstractMixcloudObject
         $this->width = $this->_options["width"];
         $this->height = $this->_options["height"];
     }
+
+	/**
+	 * Make an array from options
+	 */
+	function arrayOptions(){
+		$arrayOpts = array();
+		$arrayOpts["embed_uuid"] = $this->getUuid();
+		$arrayOpts["replace"] = 0;
+		if (!$this -> _options["cover"]) $arrayOpts["hide_cover"] = 1;
+		if (!$this -> _options["artwork"]) $arrayOpts["hide_artwork"] = 1;
+		$arrayOpts["embed_type"] = "widget_standard";
+		if (!$this -> _options["tracklist"]) $arrayOpts["hide_tracklist"] = 1;
+		$arrayOpts["stylecolor"] = $this->_options['color'];
+		$arrayOpts["mini"] = $this->_options['mini'];
+		$arrayOpts["light"] = $this->_options['light'];
+
+		$str = "";
+		foreach($arrayOpts as $k => $v){
+			$str .= "&amp;$k=$v";
+		}
+		return $str;
+
+	}
 }
 
 class MixcloudEmbedObject extends AbstractMixcloudObject
@@ -117,17 +140,16 @@ class MixcloudEmbedObject extends AbstractMixcloudObject
     function __construct($options, $url)
     {
         parent::__construct($options, $url);
-        $this->movie = "//www.mixcloud.com/media/swf/player/mixcloudLoader.swf?feed=".urlencode($url)."&amp;embed_uuid=" . $this->getUuid() . "&amp;stylecolor=" . $this->_options["color"] . "&amp;embed_type=widget_standard";
+        $this->movie = "//www.mixcloud.com/media/swf/player/mixcloudLoader.swf?feed=".urlencode($url) .  $this -> arrayOptions();
         $this->params["allowFullScreen"] = "true";
         $this->params["wmode"] = "opaque";
         $this->params["allowscriptaccess"] = "always";
-
 
     }
 
     public function getUuid()
     {
-        return "c4579e14-9570-4cce-9f7a-97c1f9e17929";
+        return "8d600ec2-4de4-4196-804f-5d839aac495d";
     }
 
 
@@ -149,16 +171,25 @@ class MixcloudEmbedHtml5 extends AbstractMixcloudObject
     function __construct($options, $url)
     {
         parent::__construct($options, $url);
-        $this->movie = "//www.mixcloud.com/widget/iframe/?feed=".urlencode($url)."&amp;embed_uuid=" . $this->getUuid() . "&amp;stylecolor=" . $this->_options['color'] . "&amp;embed_type=widget_standard";
+        $this->movie = "//www.mixcloud.com/widget/iframe/?feed=".urlencode($url) . $this -> arrayOptions();
+
+		/**
+		 *
+		 * <iframe width='600' height='180' src='//www.mixcloud.com/widget/iframe/?feed=http%3A%2F%2Fwww.mixcloud.com%2FBJT%2Fbjt-workout-session-1%2F&amp;embed_uuid=25198838-bedd-46c8-81b8-b0e0246e4816&amp;replace=0&amp;hide_cover=1&amp;hide_tracklist=1&amp;hide_artwork=1&amp;stylecolor=#fffff&amp;mini=1&amp;light=1&amp;embed_type=widget_standard' frameborder='0'></iframe>
+		 * <iframe width="660" height="180" src="//www.mixcloud.com/widget/iframe/?feed=http%3A%2F%2Fwww.mixcloud.com%2FBJT%2Fbjt-workout-session-1%2F&amp;embed_uuid=25198838-bedd-46c8-81b8-b0e0246e4816&amp;replace=0&amp;hide_cover=1&amp;hide_artwork=1&amp;embed_type=widget_standard&amp;hide_tracklist=1" frameborder="0"></iframe><div style="clear: both; height: 3px; width: 652px;"></div><p style="display: block; font-size: 11px; font-family: 'Open Sans', Helvetica, Arial, sans-serif; margin: 0px; padding: 3px 4px; color: rgb(153, 153, 153); width: 652px;"><a href="http://www.mixcloud.com/BJT/bjt-workout-session-1/?utm_source=widget&amp;amp;utm_medium=web&amp;amp;utm_campaign=base_links&amp;amp;utm_term=resource_link" target="_blank" style="color:#808080; font-weight:bold;">BJT - WORKOUT SESSION #1</a><span> by </span><a href="http://www.mixcloud.com/BJT/?utm_source=widget&amp;amp;utm_medium=web&amp;amp;utm_campaign=base_links&amp;amp;utm_term=profile_link" target="_blank" style="color:#808080; font-weight:bold;">Bjt</a><span> on </span><a href="http://www.mixcloud.com/?utm_source=widget&amp;utm_medium=web&amp;utm_campaign=base_links&amp;utm_term=homepage_link" target="_blank" style="color:#808080; font-weight:bold;"> Mixcloud</a></p><div style="clear: both; height: 3px; width: 652px;"></div>
+		 */
     }
+
+
 
     public function getUuid()
     {
-        return "4743a4fe-c254-4cb4-a49e-bf2d6d1e8d94";
+        return "25198838-bedd-46c8-81b8-b0e0246e4816";
     }
 
     function __toString()
     {
+
         return "<iframe width='" . $this->width . "' height='" . $this->height . "' src='" . $this->movie . "' frameborder='0'></iframe>";
     }
 
@@ -350,6 +381,11 @@ class MixcloudEmbedCore
             'color' 	=> (isset($options["color"]) != "") 	? $options["color"] 	: $this->getOption("player_color"),
             'iframe' 	=> (isset($options["iframe"]) != "") 	? $options["iframe"] 	: $this->getOption("player_iframe"),
             'playlist' 	=> (isset($options["playlist"]) != "") 	? $options["playlist"] 	: $this->getOption("player_playlist"),
+			'cover' 	=> (isset($options["cover"]) != "") 	? $options["cover"] 	: $this->getOption("player_cover"),
+			'artwork' 	=> (isset($options["artwork"]) != "") 	? $options["artwork"] 	: $this->getOption("player_artwork"),
+			'tracklist' => (isset($options["tracklist"]) != "") ? $options["tracklist"] : $this->getOption("player_tracklist"),
+			'mini' 		=> (isset($options["mini"]) != "") 		? $options["mini"] 		: $this->getOption("player_mini"),
+			'light' 	=> (isset($options["light"]) != "") 	? $options["light"] 	: $this->getOption("player_light"),
             'profile' 	=> (isset($options["profile"]) != "") 	? $options["profile"] 	: $this->getOption("widget_profile"),
         );
 
@@ -444,6 +480,8 @@ class MixcloudEmbedCore
         $this->_options['mixcloud-embed_player_iframe'] = true;
         $this->_options['mixcloud-embed_player_color'] = '#fffff';
         $this->_options['mixcloud-embed_player_playlist'] = false;
+        $this->_options['mixcloud-embed_player_mini'] = false;
+        $this->_options['mixcloud-embed_player_light'] = false;
         $this->_options['mixcloud-embed_widget_profile'] = "";
     }
 
