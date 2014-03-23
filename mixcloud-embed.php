@@ -9,17 +9,17 @@
  You can also display a playlist of the cloudcast.
  In the last version there is the possibility to use a widget on your sidebar for view your Mixcloud profile.
 
-   BJT (Liveset)
+   Domenico Biancardi
 
 
  Info for WordPress:
  ==============================================================================
  Plugin Name: Mixcloud Embed
  Description: The Mixcloud Embed plugin allows you to embed the Mixcloud player with the playlist or put a widget with your Mixcloud account.
- Version: 1.7
+ Version: 1.7.2
  Requires at least: 3.5.1
  Tested up to: 3.8.1
- Stable tag: 1.7
+ Stable tag: 1.7.2
  Contributors: Domenico Biancardi
  Author: Domenico Biancardi
  Author URI: http://www.domenicobiancardi.com
