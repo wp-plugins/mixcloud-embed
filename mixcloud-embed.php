@@ -20,9 +20,9 @@
  Requires at least: 3.5.1
  Tested up to: 3.8.1
  Stable tag: 1.7
- Contributors: BJTliveset
- Author: BJTLIVESET
- Author URI: http://www.bjtlivest.com
+ Contributors: Domenico Biancardi
+ Author: Domenico Biancardi
+ Author URI: http://www.domenicobiancardi.com
  Text Domain: mixcloud-embed
 
 

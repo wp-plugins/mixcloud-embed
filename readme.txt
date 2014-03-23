@@ -1,5 +1,5 @@
 === Mixcloud Embed ===
-Contributors: BJTliveset
+Contributors: Domenico Biancardi
 Tags: mixcloud, html5, flash, player, shortcode, streaming
 Requires at least: 3.5.1
 Tested up to: 3.5.1
@@ -21,7 +21,7 @@ As default you only need to copy the URL of the song from Mixcloud you wish to a
  
 `[mixcloud]http://www.mixcloud.com/artist-name/long-live-set-name/[/mixcloud]`
 
-Make sure it's the permalink (*…com/artist-name/dj-set-or-live-name/*) instead of "*…com/bjtliveset/*". 
+Make sure it's the permalink (*…com/artist-name/dj-set-or-live-name/*) instead of "*…com/domenicobiancardi/*".
 
 The optional parameters are height and width: 
 
@@ -82,6 +82,9 @@ The Mixcloud Embed plugin allows you to embed the Mixcloud player to your WordPr
 1. Mixcloud player on a post.
 
 == Changelog ==
+
+= 1.7.1 =
+* Fix a new Author and relative website dedicate to a plugin
 
 = 1.7 =
 * Update a plugin with a new embed code from Mixcloud.com
