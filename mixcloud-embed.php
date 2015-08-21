@@ -16,10 +16,10 @@
  ==============================================================================
  Plugin Name: Mixcloud Embed
  Description: The Mixcloud Embed plugin allows you to embed the Mixcloud player with the playlist or put a widget with your Mixcloud account.
- Version: 1.7.2
+ Version: 2.0.0
  Requires at least: 3.5.1
  Tested up to: 3.8.1
- Stable tag: 1.7.2
+ Stable tag: 2.0.0
  Contributors: Domenico Biancardi
  Author: Domenico Biancardi
  Author URI: http://www.domenicobiancardi.com
