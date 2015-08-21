@@ -2,8 +2,8 @@
 Contributors: Domenico Biancardi
 Tags: mixcloud, html5, flash, player, shortcode, streaming
 Requires at least: 3.5.1
-Tested up to: 3.5.1
-Stable tag: 1.7.2
+Tested up to: 4.3.0
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,19 +49,17 @@ This version accepts the following parameters:
 
 = Examples =
 
-`[mixcloud]http://www.mixcloud.com/BJT/bjt-liveset-minimal-part1/[/mixcloud]`
+`[mixcloud]https://www.mixcloud.com/dottblanchard/dott-blanchard-discovering-music/[/mixcloud]`
 
-`[mixcloud height="100" width="400"]http://www.mixcloud.com/BJT/bjt-djset-1/[/mixcloud]`
+`[mixcloud height="100" width="400"]https://www.mixcloud.com/dottblanchard/dott-blanchard-discovering-music/[/mixcloud]`
 
-`[mixcloud iframe="true"]http://www.mixcloud.com/BJT/bjt-liveset-techno-part1/[/mixcloud]`
+`[mixcloud iframe="true"]https://www.mixcloud.com/dottblanchard/dott-blanchard-discovering-music/[/mixcloud]`
 
-`[mixcloud iframe="false"]http://www.mixcloud.com/BJT/live-set-10-short/[/mixcloud]`
+`[mixcloud iframe="false"]https://www.mixcloud.com/dottblanchard/dott-blanchard-discovering-music/[/mixcloud]`
 
 `[mixcloud]http://www.mixcloud.com/BJT/playlists/bjt-djset/[/mixcloud]`
 
-`[mixcloud playlist="true"]http://www.mixcloud.com/BJT/live-set-10-short/[/mixcloud]`
-
-`[mixcloud profile="true"]http://www.mixcloud.com/BJT/[/mixcloud]`
+`[mixcloud profile="true"]http://www.mixcloud.com/dottblanchard/[/mixcloud]`
 
 == Installation ==
 
@@ -82,6 +80,10 @@ The Mixcloud Embed plugin allows you to embed the Mixcloud player to your WordPr
 1. Mixcloud player on a post.
 
 == Changelog ==
+
+= 2.0.0 =
+* Update the new version of share code
+* Remove the retrieve playlist because the iframe object retrive also
 
 = 1.7.2 =
 * Error a current version

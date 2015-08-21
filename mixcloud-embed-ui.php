@@ -76,14 +76,52 @@ class MixcloudEmbedUI
                     </td>
                 </tr>
 
+
                 <tr valign="top">
-                    <th scope="row">Playlist</th>
+                    <th scope="row">Show Cover</th>
                     <td>
-                        <input type="radio" id="mixcloud-embed_player_playlist" name="mixcloud-embed_player_playlist" value="true"  <?php if ($this->core->GetOption('player_playlist') == "true") echo 'checked'; ?> />
-                        <label for="mixcloud-embed_player_playlist" style="margin-right: 1em;">Display playlist of the
-                            mixcloud</label>
-                        <input type="radio" id="mixcloud-embed_player_playlist" name="mixcloud-embed_player_playlist" value="false" <?php if ($this->core->GetOption('player_playlist') == "false") echo 'checked'; ?> />
-                        <label for="mixcloud-embed_player_playlist" style="margin-right: 1em;">Don't display playlist</label>
+                        <input type="checkbox" name="mixcloud-embed_cover" id="mixcloud-embed_cover" value="<?php echo $this->core->GetOption('cover'); ?>"/>
+                        View the cover of cloudcast
+                    </td>
+                </tr>
+
+                <tr valign="top">
+                    <th scope="row">Mini Player</th>
+                    <td>
+                        <input type="checkbox" name="mixcloud-embed_mini" id="mixcloud-embed_mini" value="<?php echo $this->core->GetOption('mini'); ?>"/>
+                        View only essential controls
+                    </td>
+                </tr>
+
+                <tr valign="top">
+                    <th scope="row">Light Widget</th>
+                    <td>
+                        <input type="checkbox" name="mixcloud-embed_light" id="mixcloud-embed_light" value="<?php echo $this->core->GetOption('light'); ?>"/>
+                        Light color of embed controller
+                    </td>
+                </tr>
+
+                <tr valign="top">
+                    <th scope="row">Autoplay</th>
+                    <td>
+                        <input type="checkbox" name="mixcloud-embed_autoplay" id="mixcloud-embed_autoplay" value="<?php echo $this->core->GetOption('autoplay'); ?>"/>
+                        Autoplay a cloudcast
+                    </td>
+                </tr>
+
+                <tr valign="top">
+                    <th scope="row">Show Tracklist</th>
+                    <td>
+                        <input type="checkbox" name="mixcloud-embed_tracklist" id="mixcloud-embed_tracklist" value="<?php echo $this->core->GetOption('tracklist'); ?>"/>
+                        Show the tracklist
+                    </td>
+                </tr>
+
+                <tr valign="top">
+                    <th scope="row">Show Artwork</th>
+                    <td>
+                        <input type="checkbox" name="mixcloud-embed_artwork" id="mixcloud-embed_artwork" value="<?php echo $this->core->GetOption('artwork'); ?>"/>
+                        Show the artwork
                     </td>
                 </tr>
 
@@ -95,7 +133,7 @@ class MixcloudEmbedUI
                     <td>View a single cloudcast on post</td>
                 </tr>
                 <tr>
-                    <td><pre>[mixcloud]http://www.mixcloud.com/BJT/bjt-liveset-minimal-part1/[/mixcloud]</pre></td>
+                    <td><pre>[mixcloud]https://www.mixcloud.com/dottblanchard/dott-blanchard-discovering-music/[/mixcloud]</pre></td>
                 </tr>
                 <tr>
                     <td>View a multi cloudcast on post</td>
